@@ -40,9 +40,10 @@ echo    8     系统文件完整性检测
 echo    9     DisableTouchpad
 echo    10    查找并清理未使用的文件和快捷方式，并执行维护任务
 echo    11    查找并解决在此版本的Windows上运行较旧程序的问题
+echo    12    微信多开模块
 echo    0     exit
 
-set /p choice=请输入操作选项 (0-11):
+set /p choice=请输入操作选项 (0-12):
 
 if "%choice%"=="1" goto install_programs
 if "%choice%"=="2" goto rename_computer
@@ -55,6 +56,7 @@ if "%choice%"=="8" goto sfc
 if "%choice%"=="9" goto DisableTouchpad
 if "%choice%"=="10" goto MaintenanceDiagnostic
 if "%choice%"=="11" goto PCWDiagnostic
+if "%choice%"=="12" goto WeChat
 if "%choice%"=="0" goto end
 
 :install_programs
@@ -264,6 +266,33 @@ if exist "%FILENAME%" (
 )
 
 endlocal
+pause
+goto menu
+
+:WeChat
+:: 提示用户输入微信安装路径
+set /p wechatPath=请输入微信安装路径 (例如 C:\Program Files (x86)\Tencent\WeChat\WeChat.exe): 
+:: 检查路径是否为空
+if "%wechatPath%"=="" (
+    echo 安装路径不能为空！
+    exit /b 1
+)
+
+:: 提示用户输入要启动的微信实例数量
+set /p numInstances=请输入要启动的微信实例数量: 
+:: 检查输入是否为有效数字
+for /f "delims=0123456789" %%a in ("%numInstances%") do (
+    echo 输入的实例数量无效，请输入一个正整数。
+    exit /b 1
+)
+
+:: 启动指定数量的微信实例
+for /l %%i in (1,1,%numInstances%) do (
+    echo 启动微信实例 %%i...
+    start "" "%wechatPath%"
+)
+
+echo 所有微信实例已启动。
 pause
 goto menu
 
