@@ -38,9 +38,11 @@ echo    6     内存检测
 echo    7     System file detection
 echo    8     系统文件完整性检测
 echo    9     DisableTouchpad
+echo    10    查找并清理未使用的文件和快捷方式，并执行维护任务
+echo    11    查找并解决在此版本的Windows上运行较旧程序的问题
 echo    0     exit
 
-set /p choice=请输入操作选项 (0-9):
+set /p choice=请输入操作选项 (0-11):
 
 if "%choice%"=="1" goto install_programs
 if "%choice%"=="2" goto rename_computer
@@ -51,6 +53,8 @@ if "%choice%"=="6" goto memory
 if "%choice%"=="7" goto sys
 if "%choice%"=="8" goto sfc
 if "%choice%"=="9" goto DisableTouchpad
+if "%choice%"=="10" goto MaintenanceDiagnostic
+if "%choice%"=="11" goto PCWDiagnostic
 if "%choice%"=="0" goto end
 
 :install_programs
@@ -209,6 +213,59 @@ echo 完成
 pause
 goto menu
 
+:MaintenanceDiagnostic
+REM 定义下载URL和保存路径
+set "URL=https://download.microsoft.com/download/F/E/7/FE74974A-9029-41A0-9EB2-9CCE3FC20B99/MaintenanceDiagnostic.diagcab"
+set "FILENAME=MaintenanceDiagnostic.diagcab"
+
+REM 检查文件是否已存在
+if exist "%FILENAME%" (
+    echo 文件 "%FILENAME%" 已经存在，跳过下载。
+    echo 正在运行 "%FILENAME%"
+    start "" "%FILENAME%"
+) else (
+    echo 文件 "%FILENAME%" 不存在，正在下载...
+    powershell -Command "Invoke-WebRequest -Uri %URL% -OutFile %FILENAME%"
+    
+    REM 检查下载是否成功
+    if exist "%FILENAME%" (
+        echo 下载完成，正在运行 "%FILENAME%"
+        start "" "%FILENAME%"
+    ) else (
+        echo 下载失败
+    )
+)
+
+endlocal
+pause
+goto menu
+
+:PCWDiagnostic
+REM 定义下载URL和保存路径
+set "URL=https://download.microsoft.com/download/F/E/7/FE74974A-9029-41A0-9EB2-9CCE3FC20B99/PCWDiagnostic.diagcab"
+set "FILENAME=PCWDiagnostic.diagcab"
+
+REM 检查文件是否已存在
+if exist "%FILENAME%" (
+    echo 文件 "%FILENAME%" 已经存在，跳过下载。
+    echo 正在运行 "%FILENAME%"
+    start "" "%FILENAME%"
+) else (
+    echo 文件 "%FILENAME%" 不存在，正在下载...
+    powershell -Command "Invoke-WebRequest -Uri %URL% -OutFile %FILENAME%"
+    
+    REM 检查下载是否成功
+    if exist "%FILENAME%" (
+        echo 下载完成，正在运行 "%FILENAME%"
+        start "" "%FILENAME%"
+    ) else (
+        echo 下载失败
+    )
+)
+
+endlocal
+pause
+goto menu
 
 :end
 echo 退出脚本。
