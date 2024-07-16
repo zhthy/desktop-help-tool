@@ -41,9 +41,10 @@ echo    9     DisableTouchpad
 echo    10    查找并清理未使用的文件和快捷方式，并执行维护任务
 echo    11    查找并解决在此版本的Windows上运行较旧程序的问题
 echo    12    微信多开模块
+echo    13    重置网络堆栈
 echo    0     exit
 
-set /p choice=请输入操作选项 (0-12):
+set /p choice=请输入操作选项 (0-13):
 
 if "%choice%"=="1" goto install_programs
 if "%choice%"=="2" goto rename_computer
@@ -57,6 +58,7 @@ if "%choice%"=="9" goto DisableTouchpad
 if "%choice%"=="10" goto MaintenanceDiagnostic
 if "%choice%"=="11" goto PCWDiagnostic
 if "%choice%"=="12" goto WeChat
+if "%choice%"=="13" goto net
 if "%choice%"=="0" goto end
 
 :install_programs
@@ -293,6 +295,12 @@ for /l %%i in (1,1,%numInstances%) do (
 )
 
 echo 所有微信实例已启动。
+pause
+goto menu
+
+:net
+netsh winsock reset
+netsh int ip reset
 pause
 goto menu
 
