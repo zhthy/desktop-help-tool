@@ -60,6 +60,7 @@ if "%choice%"=="10" goto MaintenanceDiagnostic
 if "%choice%"=="11" goto PCWDiagnostic
 if "%choice%"=="12" goto WeChat
 if "%choice%"=="13" goto net
+if "%choice%"=="14" goto power
 if "%choice%"=="0" goto end
 
 :install_programs
