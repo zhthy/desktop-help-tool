@@ -42,6 +42,7 @@ echo    10    查找并清理未使用的文件和快捷方式，并执行维护
 echo    11    查找并解决在此版本的Windows上运行较旧程序的问题
 echo    12    微信多开模块
 echo    13    重置网络堆栈
+echo    14    生成电池检测报告
 echo    0     exit
 
 set /p choice=请输入操作选项 (0-13):
@@ -301,6 +302,11 @@ goto menu
 :net
 netsh winsock reset
 netsh int ip reset
+pause
+goto menu
+
+:power
+powercfg /batteryreport
 pause
 goto menu
 
